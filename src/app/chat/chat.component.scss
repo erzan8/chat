@@ -1,0 +1,126 @@
+$radius:30px;
+$main-color:#1b262c;
+$dark-color: #11171b;
+$color1:#0f4c75;
+$color2:#3282b8;
+$color3:#bbe1fa;
+
+.main{
+    display:flex;
+    align-items: center;
+    margin:2rem;
+    justify-content: space-between;
+    height:90vh;
+    
+    .home-side{
+        text-align: left;
+        margin:auto;
+        h1{
+            font-size:3rem;
+            color:$color3;
+        }
+        #pseudo{
+            display: block;
+            margin:1rem;
+            bottom:0;
+            right:0;
+            width:350px;
+            display: flex;
+            input{
+                display: block;
+                border:none;
+                min-height:15px;
+                width:-webkit-fill-available;
+                border-radius: $radius;
+                padding:1rem;
+                font-size: 1.2rem;
+            }
+            button{
+                margin-left:1rem;
+                border:none;
+                border-radius: 50%;
+                padding:1rem;
+                width:60px;
+                height: 50px;
+                padding: 0.7rem;
+                cursor: pointer;
+                background-color: $color3;
+                color:$color1;
+                font-size:1.2rem;
+                font-weight:bold;
+                transition:all 300ms ease;
+                &:hover{
+                    color:white;
+                    background-color: $color1;
+                }
+            }
+        }
+    }
+}
+.messages-window{
+    width:100%;
+    max-width:600px;
+    height:75vh;
+    margin:auto;
+    background: $main-color;
+    box-shadow: black 0px 0px 25px 0px;
+    border-radius:$radius;
+    padding:1rem;
+    position: relative;
+    ul{
+        margin:0;
+        padding:0;
+        list-style: none;
+        .pseudo{
+            color: white;
+            margin: 0 1rem -0.8rem 1rem;
+        }
+        li{
+            width:fit-content;
+            min-height: 15px;
+            padding:1rem;
+            font-size:1.1rem;
+            color:$color3;
+            background-color: $dark-color;
+            border-radius: $radius;
+            margin:1rem;
+            // margin-left:auto;
+        }
+        .received{
+            margin-left:1rem;
+        }
+    }
+    #send{
+        display: block;
+        position: absolute;
+        margin:1rem;
+        bottom:0;
+        right:0;
+        width:-webkit-fill-available;
+        display: flex;
+        input{
+            display: block;
+            border:none;
+            min-height:15px;
+            width:-webkit-fill-available;
+            border-radius: $radius;
+            padding:1rem;
+            font-size:1.1rem;
+        }
+        button{
+            margin-left:1rem;
+            border:none;
+            border-radius: 50px;
+            padding:1rem;
+            width:3rem;
+            height: 3rem;
+            padding: 0.7rem;
+            cursor: pointer;
+        }
+        .fa-paper-plane{
+            width: 25px;
+            height: 25px;
+            color:$color2;
+        }
+    }
+}
