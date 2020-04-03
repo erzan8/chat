@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewChecked } from '@angular/core';
+import { Component, OnInit, AfterViewChecked, OnDestroy } from '@angular/core';
 import { WebSocketService } from '../web-socket.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import {Data} from '../models/data.model';
@@ -10,7 +10,7 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./chat.component.scss']
 })
 
-export class ChatComponent  implements OnInit, AfterViewChecked {
+export class ChatComponent  implements OnInit, AfterViewChecked, OnDestroy {
 user:string;
 room: string;
 messageForm: FormGroup;
@@ -38,6 +38,7 @@ messageArray: Array<{user:String, message:String}> = [];
   ngOnInit() {
     //listen to event from socket.io server
     this.webSocketService.listen('message').subscribe((data: Data) => {
+      console.log('received =>', data);
       this.messages.push(data);
       if(data.pseudo != this.messageSent.pseudo){
         //If user pseudo equal pseudo of received message --> we don't change the side of the message
@@ -54,22 +55,19 @@ messageArray: Array<{user:String, message:String}> = [];
       }
       //this.lastPseudo = data.pseudo;
     });
-
-    this.webSocketService.listen('connection').subscribe((data) => {
-      console.log(data);
-    });
-    this.webSocketService.listen('disconnect').subscribe((data) => {
-      console.log(data);
-    });
-    // this.autoScroll();
   }
   ngAfterViewChecked(){
     this.autoScroll();
+  }
+  ngOnDestroy(){
+    this.leaveRoom();
   }
 
   onSubmit(message) {
     this.messageSent.message = message;
     this.messageSent.pseudo = this.user;
+    this.messageSent.room = this.room;
+    console.log('messageSent =>', this.messageSent);
     this.messageForm.reset();
     this.webSocketService.emit('message', this.messageSent);
   }
