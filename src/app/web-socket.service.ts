@@ -25,4 +25,14 @@ export class WebSocketService {
   emit(eventName: string, data?:any){
     this.socket.emit(eventName, data);
   }
+
+  newUserJoined(){
+    let observable = new Observable<{user:String, message:String}>( observer => {
+      this.socket.on('new user joined', (data) => {
+        observer.next(data);
+      });
+      return () => {this.socket.disconnect();}
+    });
+    return observable;
+  }
 }

@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { WebSocketService } from '../web-socket.service';
 
 @Component({
   selector: 'app-home',
@@ -7,9 +9,30 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomeComponent implements OnInit {
 
-  constructor() { }
+  pseudoForm: FormGroup;
+  user:String;
+  room:String;
+
+ 
+ constructor(
+   private fb: FormBuilder,
+   private webSocketService: WebSocketService,
+   ){
+
+    this.pseudoForm = this.fb.group({
+      pseudo:'',
+    });
+   }
 
   ngOnInit(): void {
+   
+  }
+  join(){
+    console.log(this.room);
+    this.webSocketService.emit('join', {user:this.user, room:this.room});
   }
 
+  // setPseudo(pseudo:string){
+  //   this.pseudo = pseudo;
+  // }
 }

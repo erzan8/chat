@@ -1,16 +1,20 @@
 <div class="main">
     <div class="home-side">
-        <h1>Choose your pseudo</h1>
+        <!-- <h1>Choose your pseudo</h1>
         <form [formGroup]="pseudoForm" id="pseudo" (ngSubmit)="setPseudo(pseudoForm.value.pseudo)">
             <input autocomplete="off" type="text" formControlName="pseudo"/>
             <button type="submit">OK</button>  
-        </form>
+        </form> -->
+        <h1>Server Logs</h1>
+        <div *ngFor="let item of messageArray">
+            <p style="color:white;">{{item.user}} : {{item.message}}</p>
+        </div>
     </div>
     <div class="messages-window">
         <ul>
             <div *ngFor= "let message of messages">
-                <p class="pseudo">{{message.pseudo}}</p>
-                <li >{{message.message}}</li>
+                <p *ngIf= "!isSameEmitter" [ngClass]="{'received': message.isReceived == true}" class="pseudo">{{message.pseudo}}</p>
+                <li [ngClass]="{'received': message.isReceived == true}">{{message.message}}</li>
             </div>
         </ul>
         <form [formGroup]="messageForm" id="send" (ngSubmit)="onSubmit(messageForm.value.message)">

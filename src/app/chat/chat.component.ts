@@ -2,6 +2,7 @@ import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { WebSocketService } from '../web-socket.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import {Data} from '../models/data.model';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-chat',
@@ -10,26 +11,31 @@ import {Data} from '../models/data.model';
 })
 
 export class ChatComponent  implements OnInit {
-user:string = 'User';
+user:string;
 messageForm: FormGroup;
 pseudoForm: FormGroup;
 messages: Data[] = [];
-lastMessage;
-isFromMe:boolean = true;
 messageSent: Data = new Data;
+lastPseudo:string ="";
+isSameEmitter:boolean = false;
+messageArray: Array<{user:String, message:String}> = [];
 
  constructor(
    private webSocketService: WebSocketService,
    private fb: FormBuilder,
+   private route : ActivatedRoute,
    ){
-
+    this.webSocketService.newUserJoined().subscribe((data) => this.messageArray.push(data));    
+    this.user = route.snapshot.params['user'];
     this.messageForm = this.fb.group({
       message:'',
     });
     
-    this.pseudoForm = this.fb.group({
-      pseudo:'',
-    });
+    // this.pseudoForm = this.fb.group({
+    //   pseudo:'',
+    // });
+
+
    }
  
   ngOnInit() {
@@ -37,11 +43,24 @@ messageSent: Data = new Data;
     this.webSocketService.listen('message').subscribe((data: Data) => {
       this.messages.push(data);
       console.log(this.messages);
-    
-      if(data.message != this.lastMessage){
-        this.isFromMe = false;
+      if(data.pseudo != this.messageSent.pseudo){
+        //If user pseudo equal pseudo of received message --> we don't change the side of the message
+        data.isReceived = true;
+      } else{
+        data.isReceived = false;
       }
+
+      if(this.lastPseudo == data.pseudo){
+        console.log(this.lastPseudo);
+        this.isSameEmitter = true;
+      }
+      else{
+        this.isSameEmitter = false;
+        console.log('false=>', this.lastPseudo);
+      }
+      //this.lastPseudo = data.pseudo;
     });
+
     this.webSocketService.listen('connection').subscribe((data) => {
       console.log(data);
     });
@@ -51,16 +70,13 @@ messageSent: Data = new Data;
   }
 
   onSubmit(message) {
-    console.log(message)
     this.messageSent.message = message;
+    this.messageSent.pseudo = this.user;
     this.messageForm.reset();
     console.log(this.messageSent);
     this.webSocketService.emit('message', this.messageSent);
-    this.lastMessage = message;
-    this.isFromMe = true;
   }
   setPseudo(pseudo:string){
-    // console.log(pseudo)
     this.messageSent.pseudo = pseudo;
   }
 }

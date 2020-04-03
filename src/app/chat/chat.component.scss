@@ -15,7 +15,7 @@ $color3:#bbe1fa;
     .home-side{
         text-align: left;
         margin:auto;
-        h1{
+        h2{
             font-size:3rem;
             color:$color3;
         }
@@ -71,9 +71,34 @@ $color3:#bbe1fa;
         margin:0;
         padding:0;
         list-style: none;
+        overflow-y: scroll;
+        height:67vh;
+        &::-webkit-scrollbar {
+            width: 10px;
+            
+        }
+        /* Track */
+        &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 30px;
+  }
+  
+  /* Handle */
+  &::-webkit-scrollbar-thumb {
+    background: $color2;
+    border-radius: 30px;
+  }
+  
+  /* Handle on hover */
+  &::-webkit-scrollbar-thumb:hover {
+    background: $dark-color;
+  }
         .pseudo{
             color: white;
-            margin: 0 1rem -0.8rem 1rem;
+            margin: 0 2rem -0.8rem 2rem;
+            margin-left:auto;
+            display: block;
+            width:fit-content;
         }
         li{
             width:fit-content;
@@ -84,10 +109,11 @@ $color3:#bbe1fa;
             background-color: $dark-color;
             border-radius: $radius;
             margin:1rem;
-            // margin-left:auto;
+            margin-left:auto;
         }
         .received{
             margin-left:1rem;
+            
         }
     }
     #send{
