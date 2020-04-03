@@ -9,9 +9,10 @@
         <div *ngFor="let item of messageArray">
             <p style="color:white;">{{item.user}} : {{item.message}}</p>
         </div>
+        <a class="button" routerLink="/home" routerLinkActive="active" (click)="leaveRoom()">Leave room</a>  
     </div>
     <div class="messages-window">
-        <ul>
+        <ul id="chatWindow">
             <div *ngFor= "let message of messages">
                 <p *ngIf= "!isSameEmitter" [ngClass]="{'received': message.isReceived == true}" class="pseudo">{{message.pseudo}}</p>
                 <li [ngClass]="{'received': message.isReceived == true}">{{message.message}}</li>

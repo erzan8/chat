@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewChecked } from '@angular/core';
 import { WebSocketService } from '../web-socket.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import {Data} from '../models/data.model';
@@ -10,8 +10,9 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./chat.component.scss']
 })
 
-export class ChatComponent  implements OnInit {
+export class ChatComponent  implements OnInit, AfterViewChecked {
 user:string;
+room: string;
 messageForm: FormGroup;
 pseudoForm: FormGroup;
 messages: Data[] = [];
@@ -25,24 +26,19 @@ messageArray: Array<{user:String, message:String}> = [];
    private fb: FormBuilder,
    private route : ActivatedRoute,
    ){
-    this.webSocketService.newUserJoined().subscribe((data) => this.messageArray.push(data));    
+    this.webSocketService.newUserJoined().subscribe((data) => this.messageArray.push(data));
+    this.webSocketService.userLeftRoom().subscribe((data) => this.messageArray.push(data));   
     this.user = route.snapshot.params['user'];
+    this.room = route.snapshot.params['room'];
     this.messageForm = this.fb.group({
       message:'',
     });
-    
-    // this.pseudoForm = this.fb.group({
-    //   pseudo:'',
-    // });
-
-
    }
  
   ngOnInit() {
     //listen to event from socket.io server
     this.webSocketService.listen('message').subscribe((data: Data) => {
       this.messages.push(data);
-      console.log(this.messages);
       if(data.pseudo != this.messageSent.pseudo){
         //If user pseudo equal pseudo of received message --> we don't change the side of the message
         data.isReceived = true;
@@ -51,12 +47,10 @@ messageArray: Array<{user:String, message:String}> = [];
       }
       //remove the pseudo on next messages if someone send several messages in a row
       if(this.lastPseudo == data.pseudo){
-        console.log(this.lastPseudo);
         this.isSameEmitter = true;
       }
       else{
         this.isSameEmitter = false;
-        console.log('false=>', this.lastPseudo);
       }
       //this.lastPseudo = data.pseudo;
     });
@@ -67,16 +61,27 @@ messageArray: Array<{user:String, message:String}> = [];
     this.webSocketService.listen('disconnect').subscribe((data) => {
       console.log(data);
     });
+    // this.autoScroll();
+  }
+  ngAfterViewChecked(){
+    this.autoScroll();
   }
 
   onSubmit(message) {
     this.messageSent.message = message;
     this.messageSent.pseudo = this.user;
     this.messageForm.reset();
-    console.log(this.messageSent);
     this.webSocketService.emit('message', this.messageSent);
   }
   setPseudo(pseudo:string){
     this.messageSent.pseudo = pseudo;
+  }
+  autoScroll(){
+    const chatWindow = document.getElementById('chatWindow');
+    chatWindow.scrollTop = chatWindow.scrollHeight;
+  }
+
+  leaveRoom(){
+    this.webSocketService.emit('leave', {user:this.user, room:this.room});
   }
 }

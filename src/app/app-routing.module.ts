@@ -15,7 +15,7 @@ const routes: Routes = [
     pathMatch: 'full'
   },
   {
-    path: 'chat/:user',
+    path: 'chat/:room/:user',
     component: ChatComponent 
   },
 ];
