@@ -49,7 +49,7 @@ messageArray: Array<{user:String, message:String}> = [];
       } else{
         data.isReceived = false;
       }
-
+      //remove the pseudo on next messages if someone send several messages in a row
       if(this.lastPseudo == data.pseudo){
         console.log(this.lastPseudo);
         this.isSameEmitter = true;
