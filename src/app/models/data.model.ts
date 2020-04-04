@@ -3,4 +3,7 @@ export class Data {
     message: string;
     room?: string;
     isReceived?:boolean;
+    clients?;
+    user;
+    
 }

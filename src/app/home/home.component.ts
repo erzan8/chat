@@ -27,12 +27,4 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
    
   }
-  join(){
-    console.log(this.room);
-    this.webSocketService.emit('join', {user:this.user, room:this.room});
-  }
-
-  // setPseudo(pseudo:string){
-  //   this.pseudo = pseudo;
-  // }
 }
