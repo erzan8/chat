@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 export class WebSocketService {
   socket:any;
 
-  readonly uri:string = "localhost:8080";
+  readonly uri:string = "https://gc-chat-service.herokuapp.com/";
 
 
   constructor() {
