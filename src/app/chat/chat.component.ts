@@ -34,14 +34,15 @@ showUsers:boolean = false;
     //get info whe someone join
     this.webSocketService.newUserJoined().subscribe((data) => {
       this.messageArray.push(data);
+      this.users = [];
       this.users.push(data.clients);
-      console.log(data.clients);
+      console.log('clients => ', data.clients);
     });
 
     this.webSocketService.userLeftRoom().subscribe((data) => {
       this.messageArray.push(data);
-      let index = this.users.indexOf(data.user);
-      this.users.splice(index, 1);
+      this.users = [];
+      this.users.push(data.clients);
     });   
     this.user = route.snapshot.params['user'];
     this.room = route.snapshot.params['room'];

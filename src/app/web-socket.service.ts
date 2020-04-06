@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 export class WebSocketService {
   socket:any;
 
-  readonly uri:string = "https://gc-chat-service.herokuapp.com/";
+  readonly uri:string = "localhost:8080";
 
 
   constructor() {
@@ -37,7 +37,7 @@ export class WebSocketService {
   }
 
   userLeftRoom(){
-    let observable = new Observable<{user:String, message:String}>( observer => {
+    let observable = new Observable<{user:String, message:String, clients?}>( observer => {
       this.socket.on('left room', (data) => {
         observer.next(data);
       });
